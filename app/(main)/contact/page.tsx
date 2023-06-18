@@ -1,5 +1,6 @@
 import FormInput from "@/src/components/input";
 import FormTextarea from "@/src/components/input/textarea";
+import ContactForm from "@/src/components/partials/forms/contact";
 import { Metadata } from "next";
 import React from "react";
 
@@ -19,11 +20,11 @@ const ContactUsPage = () => {
         />
       </div>
       <div className=" flex flex-col h-full w-full md:w-1/2 p-8 gap-2">
-        <div className="flex flex-col gap- mb-2">
+        <div className="flex flex-col gap-2 mb-2">
           <span className="bg-blue-100 w-fit text-purple-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-purple-900 dark:text-purple-300">
             Contact Us
           </span>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+          <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
             Get in touch with us!
           </h1>
           <p className="text-gray-600 text-base dark:text-gray-200 font-sans">
@@ -33,100 +34,7 @@ const ContactUsPage = () => {
             to you as soon as possible.
           </p>
         </div>
-        <form className="space-y-4">
-          <div className="flex flex-col md:flex-row gap-2">
-            <div className="w-full">
-              <label
-                htmlFor="firstName"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >
-                First Name:
-              </label>
-              <FormInput
-                type="text"
-                id="firstName"
-                name="firstName"
-                placeholder="John"
-              />
-            </div>
-
-            <div className="w-full">
-              <label
-                htmlFor="lastName"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >
-                Last Name:
-              </label>
-              <FormInput
-                type="text"
-                id="lastName"
-                name="lastName"
-                placeholder="Doe"
-              />
-            </div>
-          </div>
-          <div>
-            <label
-              htmlFor="email"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >
-              Email:
-            </label>
-            <FormInput
-              id="email"
-              name="email"
-              placeholder="johndoe@example.com"
-              type="email"
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="phone"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >
-              Phone:
-            </label>
-            <FormInput
-              id="phone"
-              name="phone"
-              placeholder="(123) 456-7890"
-              type="tel"
-              // pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-              // title="Please enter a valid phone number"
-              // required
-              // minLength={10}
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="message"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >
-              Message:
-            </label>
-
-            <FormTextarea
-              id="message"
-              name="message"
-              placeholder="Enter your message here..."
-              className="resize-none"
-              rows={5}
-              cols={50}
-              // required
-            />
-          </div>
-
-          <div>
-            <button
-              type="submit"
-              className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors duration-300"
-            >
-              Submit
-            </button>
-          </div>
-        </form>
+        <ContactForm />
       </div>
     </section>
   );
