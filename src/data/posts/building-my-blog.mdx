@@ -1,0 +1,130 @@
+---
+title: Building my own blog
+date: 06-10-2023
+authors: ["lmoisz"]
+image: /images/building-blog-image.jpg
+tags: web, css, html
+description:
+  In this post, I will talk about my experience designing and building my own blog and personal website.
+  From the difficulties, challanges, designing, etc.
+---
+
+## The Idea
+
+While I was working on another project, I started to realize the challenges and complexities involved in creating my own project from scratch. The thought of managing finances, marketing, and the amount of time required to complete it was daunting. That's when the idea struck me: why not create a [blog](https://lmoisz-blog.vercel.app) where I can share my experiences and ideas?
+
+## The Challenges I Faced
+
+Initially, building a blog seemed like a straightforward task. However, as I delved deeper into the coding and design aspects, I realized it wasn't as easy as I had initially thought. Here are some of the challenges I encountered along the way:
+
+### MDX implementation
+
+Although there is a lot of documentation for MDX and next.js, it's hard
+to make it work when I am not rendering the pages directly but looking for the posts
+in the `/src/data/posts/` dir. I thought it would be work, However it wasn't so.
+Maybe its a bad implementation from me.
+
+At first, when I tried rendering the content, it didn't work. No content was shown
+
+```js
+...
+const Article = async ({
+  params,
+}: {
+  params: {
+    slug: string;
+  };
+}) => {
+  const { slug } = params;
+  const article: any = getArticle(slug);
+  const components = useMDXComponents({
+    span: (props) => <span {...props} />,
+  });
+  if (article.error) {
+    return (
+      <div className="article">
+        <h1>Error: Article not found</h1>
+      </div>
+    );
+  }
+  const source = await serialize(article.content.toString());
+  // console.log(source.compiledSource);
+  return (
+    <article className="article">
+      {...}
+
+      <div className="text-gray-700 dark:text-gray-200">
+        <MdxContent content={article.content} />
+      </div>
+    </article>
+  );
+};
+
+```
+
+I had no idea what was going on, I spent like hours trying to find a solution
+in internet, but nothing certainly showed up.
+After some mins of removing and adding code, something came to my mind. Could this be
+an error related to the server components?
+
+- The answers, yes it was
+
+So I decided the split the components hence the:
+
+```js
+<div className="text-gray-700 dark:text-gray-200">
+  <MdxContent content={article.content} />
+</div>
+```
+
+I built another component `<MdxContent />`,
+
+```js
+import { useMDXComponents } from "@/src/components/mdx/components";
+import { MDXRemote } from "next-mdx-remote/rsc";
+
+const MdxContent = async ({ content }: { content: string }) => {
+  const components = useMDXComponents({});
+
+  return (
+    <MDXRemote
+      options={{
+        mdxOptions: {
+          //   remarkPlugins: [remarkCodeHike],
+          rehypePlugins: [],
+        },
+      }}
+      source={content.toString()}
+      components={{ ...components }}
+    />
+  );
+};
+
+export default MdxContent;
+```
+
+**Why the `source={content.toString()}`?**
+
+Well, I don't know lol. But looks like the MDXRemote is expecting a string. When I tried without the `.toString()`
+It didn't work, the content wasn't even displayed and it caused errors.
+
+** Important note **
+I realized you need to `import { MDXRemote } from "next-mdx-remote/rsc";`
+Because if you don't add the rsc, it's gonna count as a client component and the main component it's a server component
+and it's probably gonna cause all your application to crash.
+
+### Getting a domain
+
+By now, I haven't been able to find a domain that is affordable for me. I am still using the default `.vercel.app` assiged by vercel
+per default. However, as soon as I finish completing the blog, I will be looking to get a better domain.
+
+### Trying to find a logo for the web
+
+This is probably the hardest thing, I am not a good designer...
+I can probably build an application faster than I could create an icon.
+The coding seems much easier for me than a simple logo...
+I tried finding logos generators but none conviced me. So I just went to [svgrepo](https://www.svgrepo.com/) and looked
+for a basic colored brackets icon.
+
+If you want to know how to implement a code highlighter as I do in my web:
+[check this article](/blog/custom-code-highlighter-tailwind-mdx-next)
