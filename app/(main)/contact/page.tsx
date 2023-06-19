@@ -9,10 +9,11 @@ export const metadata: Metadata = {
   description: "Contact Us Page",
   keywords: "contact, us",
 };
+
 const ContactUsPage = () => {
   return (
     <section className="flex md:flex-row flex-col bg-gray-100 dark:bg-slate-800  items-center justify-center w-full h-full">
-      <div className="p-4  flex-col h-full w-full md:w-1/2 hidden md:flex">
+      <div className="p-8  flex-col h-full w-full md:w-1/2 hidden md:flex">
         <img
           className="w-full max-h-[38rem] object-cover rounded"
           src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"

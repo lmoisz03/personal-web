@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,6 +30,22 @@ export default function RootLayout({
             __html: blockingSetInitialColorMode,
           }}
         />
+        <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-1SR05QSKPF"
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag() {
+                dataLayer.push(arguments);
+              }
+              gtag('js', new Date());
+              gtag('config', 'G-1SR05QSKPF');
+            `,
+          }}
+        ></script>
       </head>
       <body
         className={`${inter.className} scrollbar-light dark:scrollbar-dark`}
