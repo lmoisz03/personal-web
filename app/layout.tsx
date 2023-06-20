@@ -47,10 +47,11 @@ export default function RootLayout({
           }}
         ></script>
         <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8742769351184367"
-          // crossorigin="anonymous"
+          id="adsbygoogle-init"
+          strategy="afterInteractive"
           crossOrigin="anonymous"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9824860854149430"
+          // crossorigin="anonymous"
         />
       </head>
       <body
