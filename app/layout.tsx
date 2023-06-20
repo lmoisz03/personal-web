@@ -46,6 +46,12 @@ export default function RootLayout({
             `,
           }}
         ></script>
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8742769351184367"
+          // crossorigin="anonymous"
+          crossOrigin="anonymous"
+        />
       </head>
       <body
         className={`${inter.className} scrollbar-light dark:scrollbar-dark`}
