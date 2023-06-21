@@ -9,7 +9,8 @@ import { getSortedArticles } from "@/src/lib/article";
 
 export const metadata = {
   title: "Blog | Web development, design and more",
-  description: strings.description,
+  description:
+    "Check the latest articles about web development, design, crypto and more in our blog for free now!",
 };
 
 const getPosts = async () => {
