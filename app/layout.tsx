@@ -45,7 +45,7 @@ export default function RootLayout({
               gtag('config', 'G-1SR05QSKPF');
             `,
           }}
-        ></script>
+        />
         <Script
           id="adsbygoogle-init"
           strategy="afterInteractive"

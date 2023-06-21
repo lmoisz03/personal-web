@@ -26,12 +26,18 @@ const BtnThemeNavbar = () => {
       }}
       aria-label="theme"
     >
-      <span className="sr-only">Theme switch</span>
-      {isDark ? (
-        <IconMoon className="h-6 w-6 dark:text-gray-300 text-gray-700" />
+      {mounted ? (
+        <>
+          {isDark ? (
+            <IconMoon className="h-6 w-6 dark:text-gray-300 text-gray-700" />
+          ) : (
+            <IconSun className="h-6 w-6 dark:text-gray-300 text-gray-700" />
+          )}
+        </>
       ) : (
         <IconSun className="h-6 w-6 dark:text-gray-300 text-gray-700" />
       )}
+      <span className="sr-only">Theme switch</span>
     </button>
   );
 };

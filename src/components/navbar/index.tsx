@@ -3,13 +3,23 @@ import {
   IconBrandGithub,
   IconBrandInstagram,
   IconBrandTwitter,
+  IconSun,
 } from "@tabler/icons-react";
 import Link from "next/link";
-import BtnThemeNavbar from "../partials/BtnThemeNavbar";
 import WebLogoMain from "../icons/logo";
 import { useState } from "react";
 import { strings } from "@/src/data/strings";
+import dynamic from "next/dynamic";
 
+const BtnThemeNavbar = dynamic(() => import("../partials/BtnThemeNavbar"), {
+  ssr: false,
+  loading: () => (
+    <div className="rounded-lg hover:bg-gray-100 p-2 dark:hover:bg-gray-800">
+      <span className="sr-only">Loading...</span>
+      <IconSun className="h-6 w-6 dark:text-gray-300 text-gray-700" />
+    </div>
+  ),
+});
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const links = [
