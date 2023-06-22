@@ -32,7 +32,7 @@ export default async function Home() {
         <div className="flex flex-col md:flex-row gap-2 p-4 md:p-8 lg:p-12">
           <main className="w-full md:w-[70%]  flex-col">
             <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-200 mb-4">
-              Last articles
+              Lastest articles
             </h1>
             <div className="flex flex-col gap-4">
               {articles.map((post) => (

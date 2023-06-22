@@ -69,7 +69,7 @@ const Navbar = () => {
             </span>
           </Link>
           <div className="flex items-center lg:order-2 ">
-            <div className="hidden sm:flex items-center">
+            {/* <div className="hidden sm:flex items-center">
               {socials.map((social) => (
                 <Link
                   key={social.name}
@@ -83,7 +83,7 @@ const Navbar = () => {
                   />
                 </Link>
               ))}
-            </div>
+            </div> */}
             <BtnThemeNavbar />
             <button
               data-collapse-toggle="mobile-menu-2"

@@ -1,20 +1,32 @@
-import FormInput from "@/src/components/input";
-import FormTextarea from "@/src/components/input/textarea";
-import ContactForm from "@/src/components/partials/forms/contact";
+import AboutMeHero from "@/src/components/hero/about";
+import ServicesSection from "@/src/components/partials/sections/services";
+import SkillsSection from "@/src/components/partials/sections/skills";
 import { Metadata } from "next";
 import React from "react";
 
 export const metadata: Metadata = {
   title: "About me | Lmoisz",
   description: "About me",
+  keywords: [
+    "about me",
+    "Lmoisz",
+    "personal information",
+    "contact",
+    "resume",
+    "cv",
+    "experience",
+  ],
 };
 
-const ContactUsPage = () => {
+const AboutMePage = () => {
   return (
-    <section className="flex md:flex-row flex-col bg-gray-100 dark:bg-slate-800  items-center justify-center w-full h-full">
-      Hello world
-    </section>
+    <div className="flex flex-col bg-gray-100 dark:bg-slate-800  items-center justify-center">
+      <AboutMeHero />
+      {/* Services section */}
+      <ServicesSection />
+      <SkillsSection />
+    </div>
   );
 };
 
-export default ContactUsPage;
+export default AboutMePage;
