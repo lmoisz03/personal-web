@@ -8,7 +8,7 @@ const AboutMeHero = () => {
       id="about-hero"
       className="bg-gray-100 dark:bg-slate-700 items-center dark:text-gray-200 w-full grid gap-2 md:grid-cols-2 px-4 lg:px-12 py-4"
     >
-      <div className="max-w-4xl w-full order-2 md:order-1">
+      <div className="max-w-4xl w-full ">
         <div className="flex flex-col gap-4">
           <span className="bg-blue-100 w-fit text-purple-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-purple-900 dark:text-purple-300">
             About Me
@@ -23,7 +23,7 @@ const AboutMeHero = () => {
           </p>
         </div>
       </div>
-      <div className="flex flex-col gap-2 md:order-1">
+      <div className="flex flex-col gap-2 ">
         <div className="md:max-w-6xl w-full md:max-h-6xl h-full">
           <Image
             src="/images/web-dev-laptop.jpg"
