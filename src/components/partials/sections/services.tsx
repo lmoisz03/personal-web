@@ -34,7 +34,7 @@ const ServicesSection = () => {
       id="services-section"
       className="grid md:grid-cols-2 bg-gray-50 dark:bg-slate-800  gap-6 items-center justify-center w-full px-4 py-14 mx-auto md:py-16 md:px-8 lg:px-12"
     >
-      <div className="flex flex-col w-full gap-2 order-2 md:order-1">
+      <div className="flex flex-col w-full gap-2 md:order-2 order-1">
         <span className="bg-blue-100 w-fit text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
           My services
         </span>
@@ -49,7 +49,7 @@ const ServicesSection = () => {
           your online presence together, creating something extraordinary.
         </p>
       </div>
-      <div className="flex flex-col gap-2 items-center justify-center  w-full">
+      <div className="flex flex-col gap-2 items-center justify-center  w-full md:order-1 order-2">
         <div className="space-y-8 flex flex-col items-center justify-center  w-full">
           {services.map((service, index) => (
             <div key={index}>

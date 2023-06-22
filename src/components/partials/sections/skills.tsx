@@ -145,7 +145,7 @@ const SkillsSection = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 w-full">
+      <div className="grid md:grid-cols-2 gap-4 w-full">
         {technologies.map((technology) => (
           <div
             key={technology.name}
