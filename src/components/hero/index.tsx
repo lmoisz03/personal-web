@@ -1,5 +1,6 @@
 import Image from "next/image";
 import SocialLinksHero from "./socialLinks";
+import Link from "next/link";
 
 const HeroBannerHome = () => {
   return (
@@ -27,9 +28,12 @@ const HeroBannerHome = () => {
             in the digital realm.
           </p>
           <div className="flex flex-row gap-2 items-center">
-            <button className="bg-gray-900 hover:bg-gray-950 text-white font-normal py-2 px-4 rounded-lg">
+            <Link
+              href="/contact"
+              className="bg-gray-950 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-100 dark:focus:ring-gray-700 dark:focus:ring-offset-gray-800 hover:bg-gray-900 text-gray-100 hover:text-gray-50  font-normal py-2 px-4 rounded-lg"
+            >
               Contact me
-            </button>
+            </Link>
             <SocialLinksHero />
           </div>
         </div>

@@ -1,5 +1,5 @@
 export const strings = {
-  description: `I am a full-stack web developer with expertise in React, Next.js, and Python. I specialize in building beautiful and functional web applications that deliver exceptional user experiences. Additionally, I have a passion for blogging, where I share my insights and knowledge on various topics related to web development, programming, and technology trends. Through my blog, I aim to provide valuable resources and practical tips to help fellow developers and enthusiasts stay up-to-date with the latest industry trends. Explore my portfolio, check out my blog, and let's bring your ideas to life!`,
+  description: `Full-stack web developer with expertise in React, Next.js, and Python. I specialize in building beautiful and functional web applications that deliver exceptional user experiences. Additionally, I have a passion for blogging, where I share my insights and knowledge on various topics related to web development, programming, and technology trends. Through my blog, I aim to provide valuable resources and practical tips to help fellow developers and enthusiasts stay up-to-date with the latest industry trends. Explore my portfolio, check out my blog, and let's bring your ideas to life!`,
   skills: [
     "React",
     "Next.js",

@@ -47,7 +47,7 @@ const ArticleCard = ({
               key={index}
               className="rounded-full flex items-center justify-center p-1.5 min-w-[64px] bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
             >
-              <span className="text-sm text-gray-500 dark:text-gray-300">
+              <span className="text-sm text-gray-700 dark:text-gray-300">
                 {tag}
               </span>
             </Link>

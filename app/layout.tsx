@@ -53,6 +53,12 @@ export default function RootLayout({
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9824860854149430"
           // crossorigin="anonymous"
         />
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          href="/rss.xml"
+          title="Your RSS Feed Title"
+        />
       </head>
       <body
         className={`${inter.className} scrollbar-light dark:scrollbar-dark`}

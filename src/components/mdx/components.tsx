@@ -15,12 +15,12 @@ type CodeProps = {
   props: any;
 };
 const headingClasses = [
-  "text-4xl font-bold", // h1
-  "text-3xl font-bold", // h2
-  "text-2xl font-bold", // h3
-  "text-xl font-bold", // h4
-  "text-lg font-bold", // h5
-  "text-base font-bold", // h6
+  "text-3xl font-bold", // h1
+  "text-2xl font-semibold", // h2
+  "text-xl font-medium", // h3 (using a different font weight)
+  "text-lg font-medium", // h4 (using a different font weight)
+  "text-base font-normal", // h5 (using a different font weight)
+  "text-sm font-normal", // h6 (using a different font weight)
 ];
 
 const heading = ({
@@ -31,8 +31,20 @@ const heading = ({
   children: React.ReactNode;
 }) => {
   const Tag: any = `h${level}`;
-  const className = headingClasses[level - 1];
-  return <Tag className={className}>{children}</Tag>;
+  const className = `${
+    headingClasses[level - 1]
+  } text-gray-900 dark:text-gray-200`;
+
+  const headingStyles = {
+    margin: "2rem 0", // Adjust the margin as per your preference
+    lineHeight: "1.2", // Adjust the line-height as per your preference
+    letterSpacing: "0.05em", // Adjust the letter-spacing as per your preference
+  };
+  return (
+    <Tag className={className} style={headingStyles}>
+      {children}
+    </Tag>
+  );
 };
 // This file is required to use MDX in `app` directory.
 export function useMDXComponents(components: MDXComponents): MDXComponents {
@@ -51,11 +63,17 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {children}
       </p>
     ),
-    ul: ({ children }) => <ul className="list-inside list-disc">{children}</ul>,
-    ol: ({ children }) => (
-      <ol className="list-inside list-decimal">{children}</ol>
+    ul: ({ children }) => (
+      <ul className="list-inside list-disc space-y-1">{children}</ul>
     ),
-    li: ({ children }) => <li className="list-item list-inside">{children}</li>,
+    ol: ({ children }) => (
+      <ol className="list-inside list-decimal space-y-1">{children}</ol>
+    ),
+    li: ({ children }) => (
+      <li className="list-item list-inside dark:text-gray-300 py-1">
+        {children}
+      </li>
+    ),
     img: ({ src, alt, height, width }) => (
       <img src={src} alt={alt} className="my-4 mx-auto max-w-full rounded" />
     ),

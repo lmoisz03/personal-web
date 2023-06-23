@@ -14,9 +14,8 @@ const AboutMeHero = () => {
             About Me
           </span>
           <h1 className="text-5xl font-bold font-sans text-gray-800 dark:text-gray-100">
-            Hello, I&apos;m{" "}
-            <span className="text-blue-600 font-bold">Lmoisz</span> a web
-            developer and designer.
+            Hello, I am <span className="text-blue-600 font-bold">Lmoisz</span>,
+            a web developer and designer.
           </h1>
           <p className="text-gray-700 dark:text-gray-200 text-base">
             {strings.description}

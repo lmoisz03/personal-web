@@ -18,7 +18,7 @@ const BtnThemeNavbar = () => {
   }
   return (
     <button
-      className="rounded-lg hover:bg-gray-100 p-2 dark:hover:bg-gray-800"
+      className="rounded-lg hover:bg-gray-100 p-2 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-100 dark:focus:ring-gray-700 dark:focus:ring-offset-gray-800 "
       onClick={(e) => {
         e.preventDefault();
         setTheme(isDark ? "light" : "dark");
