@@ -17,13 +17,13 @@ const ArticleCard = ({
 }) => {
   return (
     <div
-      className="flex gap-2 flex-row items-center py-2 border-b border-gray-200 dark:border-gray-700"
+      className="flex gap-2 flex-col-reverse sm:flex-row items-center py-4 border-b border-gray-200 dark:border-gray-700"
       style={{ maxWidth: "800px", width: "100%" }}
       key={post.title}
     >
       <div>
         <Link href={`/blog/${post.slug}`} passHref>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-50 mb-2">
+          <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-300 hover:text-gray-300 dark:hover:text-gray-200 mb-2">
             {post.title}
           </h2>
         </Link>
@@ -54,7 +54,7 @@ const ArticleCard = ({
           ))}
         </div>
       </div>
-      <div className="flex-grow cursor-pointer h-44 w-[25rem]">
+      <div className="flex-grow cursor-pointer h-44 w-full sm:w-[25rem]">
         {/* <img
           src="https://placehold.co/600x400"
           className="rounded max-h-[200px] max-w-[600px] w-full h-full object-cover"
@@ -67,7 +67,7 @@ const ArticleCard = ({
             alt={post.title}
             width={600}
             height={400}
-            className="rounded max-h-[200px] max-w-[600px] w-full h-full object-cover"
+            className="rounded sm:max-h-[200px] sm:max-w-[600px] w-full h-full object-cover hover:scale-105 transition-all duration-300"
             // objectFit="cover"
           />
         )}
