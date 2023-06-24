@@ -3,10 +3,16 @@ import AboutMeCard from "@/src/components/partials/about-me-card";
 import NewsletterCard from "@/src/components/partials/newslatter-card";
 
 import "@code-hike/mdx/dist/index.css";
-import { IconArrowUp } from "@tabler/icons-react";
 import GoUpButton from "./partials/go-up-button";
 import Footer from "@/src/components/footer";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: {
+    template: "%s | Lmoisz Blog",
+    default: "Blog",
+  },
+};
 export default function BlogLayout({
   children,
 }: {

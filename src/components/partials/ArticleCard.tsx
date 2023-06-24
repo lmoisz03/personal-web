@@ -13,6 +13,7 @@ const ArticleCard = ({
     slug: string;
     tags: string[];
     image: string;
+    category: string;
   };
 }) => {
   return (
@@ -21,15 +22,22 @@ const ArticleCard = ({
       style={{ maxWidth: "800px", width: "100%" }}
       key={post.title}
     >
-      <div>
+      <div className="flex-grow flex flex-col sm:w-[40rem]">
+        <Link
+          href={`/blog/category/${post.category}`}
+          className={`bg-blue-100 my-2 dark:bg-blue-900 text-emerald-800 dark:text-blue-300 text-xs font-medium w-fit mr-2 px-2.5 py-0.5 rounded `}
+        >
+          {post?.category}
+        </Link>
         <Link href={`/blog/${post.slug}`} passHref>
-          <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-300 hover:text-gray-300 dark:hover:text-gray-200 mb-2">
+          <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-300 hover:text-gray-300 dark:hover:text-gray-200 my-1">
             {post.title}
           </h2>
         </Link>
 
         <span className="text-sm text-gray-500 dark:text-gray-300">
           {/* Transform date to string */}
+          Posted on{" "}
           {new Date(post.date).toLocaleDateString("en-US", {
             year: "numeric",
             month: "long",

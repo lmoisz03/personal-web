@@ -5,6 +5,8 @@ import Image from "next/image";
 import ShareButtons from "@/src/components/partials/shareButtons";
 import { Metadata } from "next";
 import AnimatedLink from "../partials/animated-link";
+import Link from "next/link";
+import { IconBrandBlogger } from "@tabler/icons-react";
 // useMDXComponents
 
 export async function generateMetadata({
@@ -25,6 +27,7 @@ export async function generateMetadata({
   }
   // const previousImages = (await parent).openGraph?.images || []
   return {
+    metadataBase: new URL(`${process.env.NEXT_PUBLIC_URL}`),
     title: article.frontMatter.title,
     description: article.frontMatter.description,
     openGraph: {
@@ -67,65 +70,130 @@ const Article = async ({
 
   // console.log(source.compiledSource);
   return (
-    <article className="article">
-      {/* The image */}
-      <h1 className="text-4xl font-bold text-gray-700 dark:text-gray-200">
-        {article.frontMatter.title}
-      </h1>
-      {/* Description    */}
-      {article.frontMatter.description && (
-        <div className="my-4">
-          <p className="text-gray-500 text-base dark:text-gray-400">
-            {article.frontMatter.description}
-          </p>
-        </div>
-      )}
-      <div className="flex flex-row flex-wrap justify-between items-center py-1 border-y border-gray-200 dark:border-gray-700 my-2">
-        <div className="flex flex-row flex-wrap justify-between items-center">
-          <span className="text-gray-500 dark:text-gray-400 mr-1">
-            Posted at
-          </span>
-          <span className="text-gray-400 dark:text-gray-300 py-4">
-            {new Date(article.frontMatter.date).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </span>
-        </div>
-        {/* Share icons buttons */}
-        <div className="flex flex-row flex-wrap justify-between items-center">
-          <ShareButtons
-            description={article.frontMatter.description}
-            url={`${process.env.NEXT_PUBLIC_URL + "blog/" + slug}`}
-          />
-        </div>
-      </div>
-      {article.frontMatter.image && (
-        <div className="my-4">
-          <Image
-            src={article.frontMatter.image}
-            alt={article.frontMatter.title}
-            width={640}
-            height={360}
-            className="rounded-lg"
-          />
-        </div>
-      )}
-      {/* Date */}
+    <>
+      <nav className="flex mb-2" aria-label="Breadcrumb">
+        <ol className="inline-flex items-center space-x-1 md:space-x-3">
+          <li className="inline-flex items-center">
+            <Link
+              href={"/blog"}
+              className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
+            >
+              <IconBrandBlogger className="w-4 h-4 mr-2" />
+              Blog
+            </Link>
+          </li>
+          <li>
+            <div className="flex items-center">
+              <svg
+                aria-hidden="true"
+                className="w-6 h-6 text-gray-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <Link
+                href={`/blog/category/${article.frontMatter.category}`}
+                className="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white"
+              >
+                {article.frontMatter.category}
+              </Link>
+            </div>
+          </li>
+          <li aria-current="page">
+            <div className="flex items-center">
+              <svg
+                aria-hidden="true"
+                className="w-6 h-6 text-gray-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <span className="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">
+                {article.frontMatter.title}
+              </span>
+            </div>
+          </li>
+        </ol>
+      </nav>
 
-      <div className="text-gray-700 dark:text-gray-200">
-        <MdxContent content={article.content} />
-      </div>
-      <div className="flex flex-row flex-wrap  justify-between items-center py-4 border-t border-gray-200 dark:border-gray-700 my-6">
-        <div className="flex flex-col ">
-          <p className="text-gray-500 text-base dark:text-gray-400 mr-1">
-            Want to see more content like this?
-          </p>
-          <AnimatedLink href="/blog">Check out our blog</AnimatedLink>
+      <article className="flex flex-col w-full ">
+        {/* The image */}
+        <Link
+          href={`/blog/category/${article.frontMatter.category}`}
+          className={`bg-blue-100 my-4 dark:bg-blue-900 text-emerald-800 dark:text-blue-300 text-xs font-medium w-fit mr-2 px-2.5 py-0.5 rounded `}
+        >
+          {article.frontMatter?.category}
+        </Link>
+        <h1 className="text-4xl font-bold text-gray-700 dark:text-gray-200">
+          {article.frontMatter.title}
+        </h1>
+        {/* Description    */}
+        {article.frontMatter.description && (
+          <div className="my-4">
+            <p className="text-gray-500 text-base dark:text-gray-400">
+              {article.frontMatter.description}
+            </p>
+          </div>
+        )}
+        <div className="flex flex-row flex-wrap justify-between items-center py-1 border-y border-gray-200 dark:border-gray-700 my-2">
+          <div className="flex flex-row flex-wrap justify-between items-center">
+            <span className="text-gray-500 dark:text-gray-400 mr-1">
+              Posted at
+            </span>
+            <span className="text-gray-400 dark:text-gray-300 py-4">
+              {new Date(article.frontMatter.date).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </span>
+          </div>
+          {/* Share icons buttons */}
+          <div className="flex flex-row flex-wrap justify-between items-center">
+            <ShareButtons
+              description={article.frontMatter.description}
+              url={`${process.env.NEXT_PUBLIC_URL + "blog/" + slug}`}
+            />
+          </div>
         </div>
-      </div>
-    </article>
+        {article.frontMatter.image && (
+          <div className="my-4">
+            <Image
+              src={article.frontMatter.image}
+              alt={article.frontMatter.title}
+              width={640}
+              height={360}
+              className="rounded-lg"
+            />
+          </div>
+        )}
+        {/* Date */}
+
+        <div className="text-gray-700 dark:text-gray-200">
+          <MdxContent content={article.content} />
+        </div>
+        <div className="flex flex-row flex-wrap  justify-between items-center py-4 border-t border-gray-200 dark:border-gray-700 my-6">
+          <div className="flex flex-col ">
+            <p className="text-gray-500 text-base dark:text-gray-400 mr-1">
+              Want to see more content like this?
+            </p>
+            <AnimatedLink href="/blog">Check out our blog</AnimatedLink>
+          </div>
+        </div>
+      </article>
+    </>
   );
 };
 
