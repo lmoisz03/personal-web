@@ -120,8 +120,8 @@ const Article = async ({
                   clipRule="evenodd"
                 />
               </svg>
-              <span className="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">
-                {article.frontMatter.title}
+              <span className="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400 text-ellipsis overflow-hidden">
+                {slug}
               </span>
             </div>
           </li>

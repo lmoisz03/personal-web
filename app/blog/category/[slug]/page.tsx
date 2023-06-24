@@ -31,9 +31,26 @@ export async function generateMetadata({
     (category) => category.slug === params.slug
   );
   return {
+    metadataBase: new URL(`${process.env.NEXT_PUBLIC_URL}`),
     title: category.title,
     description: category.description,
     keywords: category.keywords,
+    openGraph: {
+      type: "website",
+      url: `${process.env.NEXT_PUBLIC_URL}/blog/category/${category.slug}`,
+      title: category.title,
+      description: category.description,
+      images: [
+        // process.env.NEXT_PUBLIC_URL+ 'api/og?slug='+category.slug}&title=${category.title}&description=${category.description},
+        process.env.NEXT_PUBLIC_URL +
+          "/api/og?slug=" +
+          category.slug +
+          "&title=" +
+          category.title +
+          "&description=" +
+          category.description,
+      ],
+    },
   };
 }
 const getPosts = async () => {
