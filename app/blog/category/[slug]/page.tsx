@@ -52,19 +52,35 @@ export async function generateMetadata({
       ],
     },
     twitter: {
+      // card: "summary_large_image",
+      // creator: "@lmoisz",
+      // description: category.description,
+      // title: category.title,
+      // images: [
+      //   process.env.NEXT_PUBLIC_URL +
+      //     "api/og?slug=" +
+      //     category.slug +
+      //     "&title=" +
+      //     category.title +
+      //     "&description=" +
+      //     category.description,
+      // ],
+      title: category.title,
+      description: category.description,
       card: "summary_large_image",
       creator: "@lmoisz",
-      description: category.description,
-      title: category.title,
-      images: [
-        process.env.NEXT_PUBLIC_URL +
+      images: {
+        url:
+          process.env.NEXT_PUBLIC_URL +
           "api/og?slug=" +
           category.slug +
           "&title=" +
           category.title +
           "&description=" +
           category.description,
-      ],
+
+        alt: category.title,
+      },
     },
   };
 }
