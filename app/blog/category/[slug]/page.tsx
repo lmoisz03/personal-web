@@ -43,7 +43,7 @@ export async function generateMetadata({
       images: [
         // process.env.NEXT_PUBLIC_URL+ 'api/og?slug='+category.slug}&title=${category.title}&description=${category.description},
         process.env.NEXT_PUBLIC_URL +
-          "/api/og?slug=" +
+          "api/og?slug=" +
           category.slug +
           "&title=" +
           category.title +
@@ -58,7 +58,7 @@ export async function generateMetadata({
       title: category.title,
       images: [
         process.env.NEXT_PUBLIC_URL +
-          "/api/og?slug=" +
+          "api/og?slug=" +
           category.slug +
           "&title=" +
           category.title +
