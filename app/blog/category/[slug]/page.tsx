@@ -51,6 +51,21 @@ export async function generateMetadata({
           category.description,
       ],
     },
+    twitter: {
+      card: "summary_large_image",
+      creator: "@lmoisz",
+      description: category.description,
+      title: category.title,
+      images: [
+        process.env.NEXT_PUBLIC_URL +
+          "/api/og?slug=" +
+          category.slug +
+          "&title=" +
+          category.title +
+          "&description=" +
+          category.description,
+      ],
+    },
   };
 }
 const getPosts = async () => {
