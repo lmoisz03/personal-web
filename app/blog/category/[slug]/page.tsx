@@ -52,19 +52,6 @@ export async function generateMetadata({
       ],
     },
     twitter: {
-      // card: "summary_large_image",
-      // creator: "@lmoisz",
-      // description: category.description,
-      // title: category.title,
-      // images: [
-      //   process.env.NEXT_PUBLIC_URL +
-      //     "api/og?slug=" +
-      //     category.slug +
-      //     "&title=" +
-      //     category.title +
-      //     "&description=" +
-      //     category.description,
-      // ],
       title: category.title,
       description: category.description,
       card: "summary_large_image",
@@ -78,7 +65,6 @@ export async function generateMetadata({
           category.title +
           "&description=" +
           category.description,
-
         alt: category.title,
       },
     },
@@ -145,7 +131,11 @@ export default async function Home({
       </div>
       <div className="flex flex-col gap-4">
         {filteredArticles.length === 0 ? (
-          <p>No articles found for this category.</p>
+          <div className=" text-gray-500 dark:text-gray-400">
+            <p className="text-gray-500 dark:text-gray-400">
+              There are no articles in this category yet.
+            </p>
+          </div>
         ) : (
           filteredArticles.map((post) => (
             <ArticleCard post={post} key={post.slug} />
