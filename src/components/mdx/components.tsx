@@ -1,6 +1,7 @@
 import type { MDXComponents } from "mdx/types";
 import CodeBlock from "./highlighter";
 import { ReactNode } from "react";
+import style from "react-syntax-highlighter/dist/esm/styles/hljs/a11y-dark";
 
 // This file allows you to provide custom React components
 // to be used in MDX files. You can import and use any
@@ -41,7 +42,7 @@ const heading = ({
     letterSpacing: "0.05em", // Adjust the letter-spacing as per your preference
   };
   return (
-    <Tag className={className} style={headingStyles}>
+    <Tag className={`dark:text-gray-200`} style={headingStyles}>
       {children}
     </Tag>
   );
@@ -63,17 +64,13 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {children}
       </p>
     ),
-    ul: ({ children }) => (
-      <ul className="list-inside list-disc space-y-1">{children}</ul>
-    ),
-    ol: ({ children }) => (
-      <ol className="list-inside list-decimal space-y-1">{children}</ol>
-    ),
-    li: ({ children }) => (
-      <li className="list-item list-inside dark:text-gray-300 py-1">
-        {children}
-      </li>
-    ),
+    // ul: ({ children }) => (
+    //   <ul className="lst-inside list-disc space-y-1"i>{children}</ul>
+    // ),
+    // ol: ({ children }) => (
+    //   <ol className="list-inside list-decimal space-y-1">{children}</ol>
+    // ),
+    li: ({ children }) => <li className="dark:text-gray-300 ">{children}</li>,
     img: ({ src, alt, height, width }) => (
       <img src={src} alt={alt} className="my-4 mx-auto max-w-full rounded" />
     ),
@@ -87,12 +84,12 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         </CodeBlock>
       ) : (
         <span
-          className={`rounded-md bg-gray-100 dark:bg-gray-700 px-2 py-1 text-sm   `}
+          className={`rounded-md bg-gray-100 dark:bg-neutral-700 font-mono dark:text-rose-500 text-rose-700 px-2 py-1 text-sm   `}
           {...props}
           style={{
-            color: "hsl(355, 65%, 65%)",
-            textShadow: "var(--code-text-shadow)",
-            fontFamily: `"Fira Code", "Fira Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace;"`,
+            // color: "hsl(355, 65%, 65%)",
+            // textShadow: "var(--code-text-shadow)",
+            // fontFamily: `"Fira Code", "Fira Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace;"`,
             // @ts-ignore
             fontSize: "0.9em",
           }}
@@ -102,13 +99,17 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       );
     },
     // @ts-ignore
+    pre: ({ children }) => {
+      return <div className="not-format">{children}</div>;
+    },
+    // @ts-ignore
     a({ href, children }: { href: string; children: React.ReactNode }) {
       return (
         <a
           href={href}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-500 hover:underline"
+          className="not-format text-blue-500 hover:underline"
         >
           {children}
         </a>
@@ -131,6 +132,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         </blockquote>
       );
     },
+
     ...components,
   };
 }

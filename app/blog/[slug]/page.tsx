@@ -34,7 +34,10 @@ export async function generateMetadata({
       title: article.frontMatter.title,
       description: article.frontMatter.description,
       type: "article",
-      images: [article.frontMatter.image],
+      images: [
+        article.frontMatter.image ??
+          `${process.env.NEXT_PUBLIC_URL}api/og?layout=blog-article&theme=dark&title=${article.frontMatter.title}&description=${article.frontMatter.description}&slug=${slug}`,
+      ],
     },
     twitter: {
       title: article.frontMatter.title,
@@ -42,7 +45,9 @@ export async function generateMetadata({
       card: "summary_large_image",
       creator: "@lmoisz",
       images: {
-        url: article.frontMatter.image,
+        url:
+          article.frontMatter.image ??
+          `${process.env.NEXT_PUBLIC_URL}api/og?layout=blog-article&theme=dark&title=${article.frontMatter.title}&description=${article.frontMatter.description}&slug=${slug}`,
         alt: article.frontMatter.title,
       },
     },
@@ -128,7 +133,7 @@ const Article = async ({
         </ol>
       </nav>
 
-      <article className="flex flex-col w-full ">
+      <article className="flex flex-col w-full">
         {/* The image */}
         <Link
           href={`/blog/category/${article.frontMatter.category}`}
@@ -170,18 +175,26 @@ const Article = async ({
         </div>
         {article.frontMatter.image && (
           <div className="my-4">
+            {/* http://localhost:5000/api/og?layout=blog-article&theme=dark&title=How%20to%20Create%20a%20Newsletter%20in%20Next.js&description=Learn%20how%20to%20create%20a%20newsletter%20feature%20in%20your%20Next.js%20application%20to%20engage%20with%20your%20audience%20and%20boost%20your%20email%20marketing%20efforts.%20Follow%20this%20step-by-step%20guide%20to%20implement%20an%20newsletter. */}
             <Image
-              src={article.frontMatter.image}
+              src={
+                article.frontMatter.image ??
+                `/api/og?layout=blog-article&theme=dark&title=${article.frontMatter.title}&description=${article.frontMatter.description}&slug=${slug}`
+              }
               alt={article.frontMatter.title}
               width={640}
               height={360}
               className="rounded-lg"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              quality={100}
+              unoptimized={true}
             />
           </div>
         )}
+
         {/* Date */}
 
-        <div className="text-gray-700 dark:text-gray-200">
+        <div className="text-gray-700 dark:text-gray-200 format dark:format-invert">
           <MdxContent content={article.content} />
         </div>
         <div className="flex flex-row flex-wrap  justify-between items-center py-4 border-t border-gray-200 dark:border-gray-700 my-6">

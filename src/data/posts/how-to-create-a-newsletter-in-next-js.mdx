@@ -1,0 +1,218 @@
+---
+title: How to Create a Newsletter in Next.js
+date: 06-25-2023
+authors: ["lmoisz"]
+tags: next.js, newsletter, email marketing, mailchimp, typescript
+category: web-development
+description: Learn how to create a newsletter feature in your Next.js application to engage with your audience and boost your email marketing efforts. Follow this step-by-step guide to implement an effective newsletter system.
+keywords: Next.js, newsletter, email marketing, web development, engagement, email campaigns, subscription, audience, nextjs 13, next13, mailchimp, app router
+---
+
+Newsletters are a powerful tool for staying connected with your audience and driving engagement. In this tutorial, we will explore how to create a newsletter feature in your Next.js application. By implementing a newsletter system, you can effectively communicate with your users, share updates, and promote your products or services.
+
+## Why Have a Newsletter?
+
+A newsletter allows you to:
+
+- Build a loyal audience by keeping them informed about your latest content or offerings.
+- Increase website traffic and conversions through targeted email campaigns.
+- Establish yourself as an authority in your industry by sharing valuable insights and expertise.
+- Nurture customer relationships and encourage repeat business.
+
+## Setting Up Mailchimp
+
+To build our newsletter subscription system, we will utilize [Mailchimp](https://mailchimp.com/), a popular email marketing service. Let's walk through the steps to get started:
+
+- **Sign up for Mailchimp**: Begin by [creating an account](https://mailchimp.com/help/create-an-account/) on Mailchimp's website. Once registered, you will obtain access to various features and tools to manage your email campaigns. Additionally, you will receive an essential component called the API key.
+
+- **Create Your Mailchimp Audience**: In Mailchimp, an audience represents your subscriber list. Create an audience tailored to your specific needs, whether it's for a blog, business, or organization. This audience will serve as the recipient base for your newsletters and updates. Make sure to note down the [audience ID](https://mailchimp.com/help/find-audience-id/), which uniquely identifies your created audience.
+
+- **Fetch Your Server Prefix**: Mailchimp operates on different server clusters, each identified by a [server prefix](https://mailchimp.com/developer/marketing/guides/quick-start/#make-your-first-api-call). To make API calls to Mailchimp, you need to determine the server prefix associated with your account. This prefix is typically a combination of letters and numbers, such as "us17." Refer to Mailchimp's documentation for guidance on finding your server prefix.
+
+## Set up your project
+
+Once we have created our mailchimp account and obtained our KEYS, we need to defined them in our `.env` file
+
+```bash
+MAILCHIMP_API_KEY=
+MAILCHIMP_AUDIENCE_ID=
+MAILCHIMP_API_SERVER=
+```
+
+Install the mailchimp marketing dependency:
+
+```bash
+pnpm i @mailchimp/mailchimp_marketing
+pnpm i --save-dev @types/mailchimp__mailchimp_marketing
+```
+
+## Creating our subscribe route
+
+To handle the subscription request we will need to create a new API endpoint at `/pages/api/v1/newsletter/subscribe.ts`
+
+```typescript
+import mailchimp, { ErrorResponse } from "@mailchimp/mailchimp_marketing";
+import { NextApiRequest, NextApiResponse } from "next";
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  if (req.method !== "POST") {
+    return res
+      .status(405)
+      .json({ error: "METHOD_NOT_ALLOWED", message: "Method not allowed" });
+  }
+
+  const { email } = req.body;
+
+  // Initialize the Mailchimp client
+
+  mailchimp.setConfig({
+    apiKey: process.env.MAILCHIMP_API_KEY,
+    server: process.env.MAILCHIMP_API_SERVER,
+  });
+
+  try {
+    const addNew = await mailchimp.lists.addListMember(
+      String(process.env.MAILCHIMP_AUDIENCE_ID),
+      {
+        email_address: email,
+        status: "subscribed",
+      }
+    );
+
+    return res.status(200).json({ message: "Successfully subscribed email." });
+  } catch (error: any) {
+    if (
+      error.response?.status === 400 &&
+      error.response?.text?.includes("Member Exists")
+    ) {
+      return res
+        .status(400)
+        .json({ error: "ALREADY_SUBSCRIBED", message: "Already subscribed" });
+    }
+
+    console.error("Error subscribing email:", error);
+    return res.status(500).json({
+      error: "Failed to subscribe.",
+      message: "Something went wrong, please try again later.",
+    });
+  }
+}
+```
+
+## Designing the Newsletter Form
+
+Well, once we have made our API endpoint we will need to show the form to the user.
+Here I made a basic form that makes the request using `fetch` to our API endpoint and validates
+if there is any error then show to the user.
+
+Here is the code:
+
+```js
+"use client";
+import { useState } from "react";
+
+const NewsletterForm = () => {
+  const [email, setEmail] = useState("");
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+
+    if (email.trim() === "") {
+      setError("Please enter a valid email");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch("/api/v1/newsletter/subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (response.ok) {
+        setIsSubscribed(true);
+        setEmail("");
+        setError("");
+      } else {
+        const errorData = await response.json();
+        setError(
+          errorData.message || "Failed to subscribe. Please try again later."
+        );
+      }
+    } catch (error) {
+      console.error("Error subscribing to the newsletter:", error);
+      setError("Failed to subscribe. Please try again later.");
+    }
+
+    setLoading(false);
+  };
+
+  return (
+    <div className="bg-white dark:bg-gray-900 shadow-lg p-6 rounded-md gap-2 flex flex-col">
+      <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-200 mb-4">
+        Subscribe to Our Newsletter
+      </h2>
+      <p className="text-gray-600 dark:text-gray-400">
+        Stay updated with the latest news, articles, and promotions.(Coming
+        soon)
+      </p>
+      {error && <p className="text-red-500 mt-2">{error}</p>}
+      {isSubscribed && (
+        <p className="text-green-500 mt-2">
+          Successfully subscribed to the newsletter!
+        </p>
+      )}
+      <form onSubmit={handleSubmit} className="flex flex-col">
+        <input
+          type="email"
+          placeholder="Your Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="border disabled:cursor-not-allowed disabled:opacity-50 border-gray-300 bg:gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 rounded-md py-2 px-4 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-300"
+          disabled={loading}
+        />
+
+        <button
+          type="submit"
+          className="bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-blue-800 text-white font-medium py-2 px-4 rounded-md hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors duration-300"
+          disabled={loading}
+        >
+          {loading ? "Subscribing..." : "Subscribe"}
+        </button>
+      </form>
+
+      <p className="text-sm text-gray-500 dark:text-gray-400 mt-4">
+        We respect your privacy and won&apos;t share your email address.
+      </p>
+    </div>
+  );
+};
+
+export default NewsletterCard;
+```
+
+It displays error messages if there are any issues with the subscription process and shows a success message when the subscription is successful.
+Feel free to customize the styles and add any additional functionality to meet your specific requirements.
+
+## Conclusion
+
+By implementing the subscription functionality and creating an engaging newsletter form, we've laid the foundation for successful newsletter management. However, our journey doesn't end here. With your continued support and engagement, we can take the newsletter experience to the next level. Make sure to subscribe to our newsletter so you don't miss out on future updates and exciting features!
+
+Here are some of the planned features we aim to implement based on your support:
+
+1. Implement subscriber management features such as storing subscriber data in a database or external service.
+2. Set up a periodic task to send newsletters to the subscribers.
+3. Customize the newsletter content and design according to your branding and requirements.
+4. Monitor the effectiveness of your newsletters through analytics and make necessary improvements.
+
+Thank you for joining us on this exciting journey! Stay tuned for more updates and enhancements in the near future.

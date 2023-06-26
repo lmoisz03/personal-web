@@ -69,16 +69,19 @@ const ArticleCard = ({
           alt=""
           width={600}
         /> */}
-        {post.image && (
-          <Image
-            src={post.image}
-            alt={post.title}
-            width={600}
-            height={400}
-            className="rounded sm:max-h-[200px] sm:max-w-[600px] w-full h-full object-cover hover:scale-105 transition-all duration-300"
-            // objectFit="cover"
-          />
-        )}
+        <Image
+          src={
+            post.image ??
+            `/api/og?layout=blog-article&theme=dark&title=${post.title}&description=${post.description}&slug=${post.slug}`
+          }
+          alt={post.title}
+          width={600}
+          height={400}
+          className="rounded sm:max-h-[200px] sm:max-w-[600px] w-full h-full object-cover hover:scale-105 transition-all duration-300"
+          // objectFit="cover"
+          quality={100}
+          priority
+        />
       </div>
     </div>
   );
