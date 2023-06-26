@@ -30,6 +30,7 @@ export async function generateMetadata({
     metadataBase: new URL(`${process.env.NEXT_PUBLIC_URL}`),
     title: article.frontMatter.title,
     description: article.frontMatter.description,
+    keywords: article.frontMatter.keywords,
     openGraph: {
       title: article.frontMatter.title,
       description: article.frontMatter.description,
