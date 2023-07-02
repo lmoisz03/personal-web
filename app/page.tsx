@@ -40,7 +40,7 @@ export default async function Home() {
               ))}
             </div>
           </main>
-          <aside className="md:w-[30%] w-full  flex-col gap-2 sticky top-0 h-full pt-16 hidden md:flex">
+          <aside className="md:w-[30%] w-full  flex-col gap-2 sticky top-0 h-full md:pt-16  flex">
             <AboutMeCard />
             <NewsletterCard />
             {/* Ads */}

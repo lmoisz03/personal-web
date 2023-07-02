@@ -68,6 +68,9 @@ export async function generateMetadata({
         alt: category.title,
       },
     },
+    alternates: {
+      canonical: `${process.env.NEXT_PUBLIC_URL}blog/category/${category.slug}`,
+    },
   };
 }
 const getPosts = async () => {

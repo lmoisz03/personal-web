@@ -1,17 +1,15 @@
-import Footer from "@/src/components/footer";
-import HeroBannerHome from "@/src/components/hero";
-import Navbar from "@/src/components/navbar";
 import ArticleCard from "@/src/components/partials/ArticleCard";
-import AboutMeCard from "@/src/components/partials/about-me-card";
-import NewsletterCard from "@/src/components/partials/newslatter-card";
-import { strings } from "@/src/data/strings";
 import { getSortedArticles } from "@/src/lib/article";
 import { getAllCategories } from "@/src/lib/helpers/getCategories";
+import { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Web development, technology, design and more",
   description:
     "Check the latest articles about web development, design, crypto and more in our blog for free now!",
+  alternates: {
+    canonical: `${process.env.NEXT_PUBLIC_URL}blog`,
+  },
 };
 
 const getPosts = async () => {

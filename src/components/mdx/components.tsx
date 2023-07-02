@@ -1,7 +1,6 @@
 import type { MDXComponents } from "mdx/types";
 import CodeBlock from "./highlighter";
 import { ReactNode } from "react";
-import style from "react-syntax-highlighter/dist/esm/styles/hljs/a11y-dark";
 
 // This file allows you to provide custom React components
 // to be used in MDX files. You can import and use any
@@ -100,7 +99,11 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     },
     // @ts-ignore
     pre: ({ children }) => {
-      return <div className="not-format">{children}</div>;
+      return (
+        <div className="overflow-auto scrollbar-light dark:scrollbar-dark">
+          {children}
+        </div>
+      );
     },
     // @ts-ignore
     a({ href, children }: { href: string; children: React.ReactNode }) {

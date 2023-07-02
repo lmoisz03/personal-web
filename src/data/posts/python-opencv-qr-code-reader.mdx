@@ -1,0 +1,102 @@
+---
+title: Building a QR Code Reader with Python and OpenCV
+date: 07-02-2023
+authors: ["lmoisz"]
+category: programming
+tags: ["Python", "OpenCV", "QR code", "webcam"]
+description: Discover how to create a QR Code reader using Python and OpenCV. This comprehensive tutorial will walk you through the process of detecting and decoding QR Codes from Webcam videos. Expand your knowledge in computer vision and explore the versatile applications of QR Codes.
+---
+
+# Building a QR Code Reader with Python and OpenCV
+
+In this tutorial, we will explore how to create a QR Code reader using Python and OpenCV. QR Codes have become increasingly popular for storing various types of information, and building a QR Code reader allows us to extract that information easily. We will cover the necessary steps to detect and decode QR Codes from images or live video streams.
+
+## Prerequisites
+
+Before we begin, make sure you have the following installed:
+
+- Python (version 3.7 or higher)
+- OpenCV library
+- Colorama library
+
+## Step 1: Setting up the Environment
+
+Let's install the necessary libraries
+
+```bash
+pip install opencv-python colorama
+```
+
+First, let's import the required libraries and set up the initial configuration for our QR Code reader.
+
+```python
+import cv2
+from colorama import Fore, Style
+```
+
+## Step 2: Initializing the QR Code Reader
+
+Next, we need to create a class that will handle the QR Code reading functionality. We'll name it QRCameraReader. Within this class, we'll define the necessary attributes and methods.
+
+```python
+class QRCameraReader:
+    def __init__(self):
+        self.url = 0
+        self.window_name = 'QR Code Reader'
+        self.delay = 1
+```
+
+What does it do?
+
+The QRCameraReader class is responsible for handling the QR Code reading functionality. It has attributes such as url, window_name, and delay that control the camera feed source, the name of the display window, and the delay between frames, respectively.
+
+## Step 3: Starting the QR Code Reader
+
+Inside the QRCameraReader class, let's define a start() method that will handle the main logic of our QR Code reader.
+
+```python
+def start(self):
+    print(Fore.BLUE + "Starting QR Code Reader..." + Style.RESET_ALL)
+    cap = cv2.VideoCapture(self.url)
+    qr_detector = cv2.QRCodeDetector()
+
+    while cap.isOpened():
+        ret, frame = cap.read()
+
+        if ret:
+            ret_qr, decoded_info, points, _ = qr_detector.detectAndDecodeMulti(frame)
+            if ret_qr:
+                for s, p in zip(decoded_info, points):
+                    if s:
+                        print(Fore.GREEN + 'Detected Link: ' + Fore.BLUE + s + Style.RESET_ALL)
+                        color = (0, 255, 0)
+                    else:
+                        color = (0, 0, 255)
+                    p = p.astype(int)
+                    frame = cv2.polylines(frame, [p], True, (0, 255, 0), 3)
+                    frame = cv2.putText(frame, s, (p[0][0], p[0][1]), cv2.FONT_HERSHEY_SIMPLEX, 1, color, 2)
+
+        cv2.imshow(self.window_name, frame)
+        if cv2.waitKey(self.delay) & 0xFF == ord('q'):
+            break
+
+    cap.release()
+    cv2.destroyAllWindows()
+```
+
+## Step 4: Initializing the QR Code Reader and Starting the Process
+
+Finally, in the main block, we'll create an instance of the QRCameraReader class and call the start() method to begin the QR Code reading process.
+
+```python
+if __name__ == '__main__':
+    qr = QRCameraReader()
+    qr.start()
+    print(Fore.YELLOW + "QR Code Reader is closed." + Style.RESET_ALL)
+```
+
+## Conclusion
+
+In this tutorial, we have learned how to build a QR Code reader using Python and OpenCV. By following the steps outlined above, you can now detect and decode QR Codes from videos using a webcam. QR Codes have a wide range of applications, and with this knowledge, you can explore their versatile uses in various fields such as marketing, inventory management, and more.
+
+You can check out the source code [by clicking in this link.](https://github.com/lmoisz03/QR-reader-webcam)

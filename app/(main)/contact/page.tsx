@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   title: "Contact Us",
   description: "Contact Us Page",
   keywords: "contact, us",
+  alternates: {
+    canonical: `${process.env.NEXT_PUBLIC_BASE_URL}contact`,
+  },
 };
 
 const ContactUsPage = () => {

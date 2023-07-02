@@ -52,6 +52,9 @@ export async function generateMetadata({
         alt: article.frontMatter.title,
       },
     },
+    alternates: {
+      canonical: `${process.env.NEXT_PUBLIC_URL}blog/${slug}`,
+    },
   };
 }
 const Article = async ({

@@ -25,7 +25,7 @@ export default function BlogLayout({
         <div className="flex flex-col md:flex-row flex-wrap md:flex-nowrap gap-2 p-4 md:p-8 lg:p-12">
           <main className="w-full md:w-[70%]  flex-col">{children}</main>
           {/* <main className="flex flex-col lg:max-w-[70%] w-full">{children}</main> */}
-          <aside className="md:w-[30%] w-full  flex-col gap-2 sticky top-0 h-full pt-16 hidden md:flex">
+          <aside className="md:w-[30%] w-full  flex-col gap-2 sticky top-0 h-full md:pt-16  flex">
             <AboutMeCard />
             <NewsletterCard />
             {/* Ads */}

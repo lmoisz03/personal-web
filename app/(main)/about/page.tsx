@@ -16,6 +16,9 @@ export const metadata: Metadata = {
     "cv",
     "experience",
   ],
+  alternates: {
+    canonical: `${process.env.NEXT_PUBLIC_BASE_URL}about`,
+  },
 };
 
 const AboutMePage = () => {

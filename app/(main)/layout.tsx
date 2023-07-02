@@ -1,6 +1,4 @@
 import Navbar from "@/src/components/navbar";
-import AboutMeCard from "@/src/components/partials/about-me-card";
-import NewsletterCard from "@/src/components/partials/newslatter-card";
 import GoUpButton from "../blog/partials/go-up-button";
 import Footer from "@/src/components/footer";
 
