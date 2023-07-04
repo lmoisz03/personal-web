@@ -4,12 +4,10 @@ import {
   IconBrandInstagram,
   IconBrandTwitter,
 } from "@tabler/icons-react";
+import Image from "next/image";
 import React from "react";
 
 const AboutMeCard = () => {
-  const profileImage =
-    "https://avatars.githubusercontent.com/u/35237160?s=400&u=c4f752305fc366d91a9331519a950d5bf66a6816&v=4";
-
   const name = "Lmoisz";
   const description =
     "I am a passionate web developer with expertise in front-end technologies. I enjoy creating responsive and user-friendly web applications. I'm constantly expanding my skills.";
@@ -43,10 +41,15 @@ const AboutMeCard = () => {
   return (
     <div className="bg-white dark:bg-gray-900 p-4 rounded-lg shadow-lg border border-gray-200 dark:border-gray-800">
       <div className="flex items-center mb-4">
-        <img
-          src={profileImage}
-          alt="Profile"
-          className="rounded-full h-12 w-12 mr-2"
+        <Image
+          src={
+            "/images/profile/c1kjEcPeNmJB55ob46DVSI6tIL6D2cSag3MmKVv7p9wVe2oqaigWGTDSP0DNsVU4JS.jpg"
+          }
+          alt="profile"
+          width={50}
+          height={50}
+          className="rounded-full mr-2"
+          quality={100}
         />
         <h2 className="text-lg font-medium text-gray-900 dark:text-gray-300">
           {name}
