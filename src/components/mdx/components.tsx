@@ -83,7 +83,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         </CodeBlock>
       ) : (
         <span
-          className={`rounded-md bg-gray-100 dark:bg-neutral-700 font-mono dark:text-rose-500 text-rose-700 px-2 py-1 text-sm   `}
+          className={`rounded-md bg-[var(--code-bg-color)] font-mono px-[0.25rem]  py-[0.15rem] text-[0.85rem]`}
           {...props}
           style={{
             // color: "hsl(355, 65%, 65%)",
@@ -99,11 +99,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     },
     // @ts-ignore
     pre: ({ children }) => {
-      return (
-        <div className="overflow-auto scrollbar-light dark:scrollbar-dark">
-          {children}
-        </div>
-      );
+      return <div className="not-format ">{children}</div>;
     },
     // @ts-ignore
     a({ href, children }: { href: string; children: React.ReactNode }) {

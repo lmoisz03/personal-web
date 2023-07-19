@@ -1,0 +1,720 @@
+---
+title: "How to Create Your Own ChatGPT with Tailwind, Next.js"
+date: 07-19-2023
+authors: ["lmoisz"]
+image: /images/posts/chatgpt-screenshot.jpg
+tags: web development, CSS, HTML, Vercel AI SDK, chatbot, Tailwind, Next.js, OpenAI, AI, web chat, chat application
+category: Web Development
+description: |
+  Are you interested in building your own chatbot like ChatGPT? In this article, We will explore how to integrate custom functions, design a clean and user-friendly UI, implement OpenAI streaming for faster responses, and build the application using popular technologies such as Tailwind, Next.js, and the Vercel AI SDK.
+Keywords: Create Your Own ChatGPT, Chatbot, Tailwind, Next.js, Vercel AI SDK, Web Development, OpenAI Streaming, UI Design, AI Integration, CSS, HTML, Web Chat, Chat Application, Custom Functions, OpenAI API Key, RapidApi Key, Next.js 13, PNPM, User Experience.
+---
+
+Are you interested in building a chatbot like ChatGPT? In this post I will show you how you can achieve it with the small requirements as possible, simple and fast.
+
+### What will our ChatGPT clone have?
+
+- Custom Functions (Like get the weater)
+- Clean and easy UI
+- OpenAI streaming for faster responses.
+- Built with Tailwind, Next.js and Vercel AI SDK.
+- Markdown Support: Tables, headings, Links, Images, etc.
+
+### Requirements
+
+- OpenAI API Key
+- RapidApi Key ( For get the weather )
+- Next.js 13
+- React Markdown Library
+
+### Let's get started
+
+To start building our APP we need to setup our project. In this case I will use PNPM as my favorite package manager. The command bellow will start your project and make you some questions such as if you want to use typescript and tailwind, I recommend starting with the tailwind template.
+
+```bash
+pnpm  dlx create-next-app
+```
+
+If tailwind didn't download, you might need to download it manually.
+
+```bash
+pnpm install -D tailwindcss postcss autoprefixer
+```
+
+Make sure we have an file named `tailwind.config.js`
+
+```js
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+
+    // Or if using `src` directory:
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};
+```
+
+After we have setup our project and downloaded all the necesaries dependencies we need to test if it works.
+
+```bash
+pnpm run dev
+```
+
+### Installing Vercel AI SDK
+
+Next, we'll install `ai` and `openai-edge`. The latter is preferred over the official OpenAI SDK due to its compatibility with Vercel Edge Functions.
+
+```bash
+pnpm install ai openai-edge
+```
+
+Now, we need to configure our enviroment variables in our `.env` file:
+
+```env
+OPENAI_API_KEY=*****
+RAPID_API_KEY=*****
+```
+
+### Creating the APP frontend
+
+After our project is set up and we have installed the dependencies we will need to give our APP some styles and design.
+Let's go to our `/app/page.tsx` and edit it like it:
+
+```tsx
+import ChatUi from "@/src/components/chat";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "GPT Clone",
+};
+
+export default function Home() {
+  return (
+    <main className="flex justify-between w-full mx-auto max-w-  4xl flex-col h-full px-4 sm:px-28 py-10">
+      <ChatUi />
+    </main>
+  );
+}
+```
+
+Let's create our `<ChatUI />` component:
+
+```tsx
+"use client";
+import { useRef, useState } from "react";
+import LoaderIcon from "../icons/loader";
+import { useChat } from "ai/react";
+import SendIcon from "../icons/send";
+import Message from "./message";
+import EmptyChatScreen from "./empty-chat";
+import PaperClipIcon from "../icons/paperclip";
+
+const ChatUi = () => {
+  const {
+    messages,
+    isLoading,
+    input,
+    handleInputChange,
+    handleSubmit,
+    setInput,
+  } = useChat();
+
+  return <></>;
+};
+
+export default ChatUi;
+```
+
+`useChat` is a utility to allow you to easily create a conversational user interface for your chatbot application. It enables the streaming of chat messages from your AI provider, manages the state for chat input, and updates the UI automatically as new messages are received.
+
+Alright, let's create the UI now.
+
+```tsx
+const ChatUi = () => {
+  const {
+    messages,
+    isLoading,
+    input,
+    handleInputChange,
+    handleSubmit,
+    setInput,
+  } = useChat();
+
+  return (
+    <>
+      <div className="flex flex-col flex-grow  w-full h-full gap-4 pb-20">
+        {
+          // If there are no messages, show the empty chat screen
+          messages.length === 0 && (
+            <EmptyChatScreen setPrompt={setPrompt} />
+            // If there are messages, show the messages
+          )
+        }
+
+        <div className="flex flex-col flex-grow gap-4 ">
+          {messages.map((message, index) => (
+            <Message key={index} message={message} />
+          ))}
+        </div>
+      </div>
+    </>
+  );
+};
+```
+
+Here we are checking if there are messages in the case there aren't messages we will show a menu component named `<EmptyChatScreen />` that we will create below.
+
+```tsx
+"use client";
+
+const EmptyChatScreen = ({
+  setPrompt,
+}: {
+  setPrompt: (prompt: string) => void;
+}) => {
+  const StarterPrompts = [
+    {
+      id: 1,
+      prompt: "Tell me a joke.",
+      data: {
+        chatPrompt: "You: Tell me a joke.",
+        user: "User",
+        assistant: "Assistant",
+        messages: [
+          { role: "system", content: "You are User" },
+          { role: "user", content: "Tell me a joke." },
+          {
+            role: "assistant",
+            content:
+              "Sure, I'd love to! Why don't scientists trust atoms? Because they make up everything!",
+          },
+        ],
+      },
+    },
+    {
+      id: 2,
+      prompt: "What's the weather like today?",
+      data: {
+        chatPrompt: "You: What's the weather like today?",
+        user: "User",
+        assistant: "Assistant",
+        messages: [
+          { role: "system", content: "You are User" },
+          { role: "user", content: "What's the weather like today?" },
+          {
+            role: "assistant",
+            content:
+              "I'm sorry, I don't have access to real-time weather information. However, you can check on a weather website or app to get the latest updates.",
+          },
+        ],
+      },
+    },
+    {
+      id: 3,
+      prompt: "What is the capital of France?",
+      data: {
+        chatPrompt: "You: What is the capital of France?",
+        user: "User",
+        assistant: "Assistant",
+        messages: [
+          { role: "system", content: "You are User" },
+          { role: "user", content: "What is the capital of France?" },
+          { role: "assistant", content: "The capital of France is Paris." },
+        ],
+      },
+    },
+    {
+      id: 4,
+      prompt: "Can you help me with a math problem?",
+      data: {
+        chatPrompt: "You: Can you help me with a math problem?",
+        user: "User",
+        assistant: "Assistant",
+        messages: [
+          { role: "system", content: "You are User" },
+          { role: "user", content: "Can you help me with a math problem?" },
+          {
+            role: "assistant",
+            content:
+              "Of course! I'll do my best. What's the math problem you need help with?",
+          },
+        ],
+      },
+    },
+    {
+      id: 5,
+      prompt: "Recommend a good book to read.",
+      data: {
+        chatPrompt: "You: Recommend a good book to read.",
+        user: "User",
+        assistant: "Assistant",
+        messages: [
+          { role: "system", content: "You are User" },
+          { role: "user", content: "Recommend a good book to read." },
+          {
+            role: "assistant",
+            content: "Certainly! What genre are you interested in?",
+          },
+        ],
+      },
+    },
+    // Add more prompts as needed
+  ];
+  return (
+    <div className="flex flex-col items-center gap-2 justify-center h-full">
+      <h1 className="text-4xl font-medium mb-2 text-gray-700 dark:text-gray-200">
+        ChatGPT Clone
+      </h1>
+      <p className="mt-2 text-base text-center text-gray-500 dark:text-gray-400">
+        This is a basic chatgpt clone built with Next.js, Tailwind CSS and
+        OpenAI API. No ideas? Select a prompt!
+      </p>
+
+      <div className="flex my-2 flex-col sm:flex-row gap-2 flex-wrap ">
+        {StarterPrompts.map((prompt, index) => (
+          <button
+            type="button"
+            key={index}
+            className="py-2.5 px-5 max-w-[315px] w-full mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+            onClick={() => {
+              setPrompt(prompt.prompt);
+            }}
+          >
+            <h3 className="text-gray-800 dark:text-gray-200 text-sm font-medium">
+              {prompt.prompt}
+            </h3>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+export default EmptyChatScreen;
+```
+
+This component recieves a callback function named `setPrompt` later I will show you what it does. Our component will render like this:
+![chat-gpt-clone-menu](/images/posts/chat-gpt-clone-menu.png)
+
+Now, we have to render the messages in our ChatUi. Let's create our `<Message />` component
+
+```tsx
+import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import OpenAiBrandIcon from "../icons/brands/openai";
+import UserIcon from "../icons/user";
+import { useMDXComponents } from "../markdown/components";
+import remarkGfm from "remark-gfm";
+
+const Message = ({
+  message,
+}: {
+  message: { role: string; content: string };
+}) => {
+  return (
+    <div
+      className={`flex relative group items-start gap-4 w-full h-full format lg:format-lg dark:format-invert flex-row`}
+    >
+      <div className="w-fit flex text-gray-800 dark:text-gray-100 border p-1.5 dark:border-gray-700  rounded-full">
+        {message.role === "user" ? (
+          <UserIcon className="h-5 w-5" />
+        ) : (
+          <OpenAiBrandIcon className="h-5 w-5" />
+        )}
+      </div>
+      <div className={`rounded-3xl  flex-1  `}>
+        <div className="w-full text-gray-800  dark:text-gray-300 text-xs not-format">
+          <ReactMarkdown
+            components={useMDXComponents({})}
+            remarkPlugins={[remarkGfm]}
+          >
+            {message.content}
+          </ReactMarkdown>
+        </div>
+        <div className="border-b dark:border-b-gray-800 my-4 md:my-8 " />
+      </div>
+    </div>
+  );
+};
+
+export default Message;
+```
+
+It takes a single prop message, which is an object containing two properties: role and content. The role property determines whether the message is from the user or the chatbot (OpenAI), and the content property holds the actual text content of the message.
+The ReactMarkdown component is used to parse and render the message content as markdown. It utilizes the useMDXComponents function to provide any custom components that can be used in the markdown content. In this case, the remarkGfm plugin is used to enable support for GitHub Flavored Markdown (GFM).
+
+To use this component, you would pass the message object as a prop when rendering it. For example:
+
+```jsx
+<Message message={{ role: "user", content: "Hello, Chatbot!" }} />
+<Message message={{ role: "bot", content: "Hi there! How can I assist you?" }} />
+```
+
+If you want more documentation about the ReactMarkdown, you might want to see for it in GitHub or clone my github respository.
+
+Next, we need to go back to our `<ChatUi>` component and we need to build the Input.
+
+```tsx
+const ChatUi = () => {
+  const {
+    messages,
+    isLoading,
+    input,
+    handleInputChange,
+    handleSubmit,
+    setInput,
+  } = useChat();
+
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    handleSubmit(e);
+  };
+
+  const setPrompt = (prompt: string) => {
+    if (PromptInput?.current) {
+      setInput(prompt);
+    }
+  };
+  return (
+    <>
+      <div className="flex flex-col flex-grow  w-full h-full gap-4 pb-20">
+        {/* ... */}
+        <form onSubmit={handleFormSubmit} className="relative z-10">
+          <div className="fixed flex flex-row gap-2 items-center inset-x-0  mt-10 bottom-0  z-20 w-full  max-w-4xl mx-auto px-8 sm:px-28 py-10">
+            <div className="flex mt-auto w-full relative bottom-0  items-center">
+              <input
+                ref={PromptInput}
+                className="bg-gray-50 border pl-10  outline-none resize-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Send a message."
+                name="message"
+                value={input}
+                onChange={handleInputChange}
+              />
+            </div>
+            <button
+              type="submit"
+              onClick={() => handleFormSubmit}
+              className={`cursor-pointer z-20 ${
+                input ? "" : "bg-gray-100 dark:bg-gray-800"
+              } border dark:border-gray-700 font-bold py-2 px-2 rounded-lg dark:text-gray-200 text-gray-700`}
+            >
+              {isLoading ? (
+                <LoaderIcon
+                  aria-hidden="true"
+                  role="status"
+                  className="w-6 h-6  animate-spin"
+                />
+              ) : (
+                <SendIcon className="h-6 w-6 rotate-45" />
+              )}
+            </button>
+          </div>
+        </form>
+      </div>
+    </>
+  );
+};
+```
+
+Our `<Form>` will be assigned a onSubmit that calls to `handleFormSubmit`, this function will send the data to the API.
+The Input gets to props, the value and the `handleInputChange`. After we have completed it our `<ChatUi>` component must look like something like this:
+
+```tsx
+"use client";
+import { useRef, useState } from "react";
+import LoaderIcon from "../icons/loader";
+import { useChat } from "ai/react";
+import SendIcon from "../icons/send";
+import Message from "./message";
+import EmptyChatScreen from "./empty-chat";
+import PaperClipIcon from "../icons/paperclip";
+
+const ChatUi = () => {
+  const PromptInput = useRef<HTMLInputElement>(null);
+  const {
+    messages,
+    isLoading,
+    input,
+    handleInputChange,
+    handleSubmit,
+    setInput,
+  } = useChat();
+
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    handleSubmit(e);
+  };
+
+  const setPrompt = (prompt: string) => {
+    if (PromptInput?.current) {
+      // We need to set the value of the input to the prompt, however needs to be done like a human
+      // because the browser will not allow it.
+      // We can't just set the value of the input to the prompt, because the browser will not allow it.
+      // We need to set the value of the input to the prompt, however needs to be done like a human
+      setInput(prompt);
+    }
+  };
+  return (
+    <>
+      <div className="flex flex-col flex-grow  w-full h-full gap-4 pb-20">
+        {
+          // If there are no messages, show the empty chat screen
+          messages.length === 0 && (
+            <EmptyChatScreen setPrompt={setPrompt} />
+            // If there are messages, show the messages
+          )
+        }
+
+        <div className="flex flex-col flex-grow gap-4 ">
+          {messages.map((message, index) => (
+            <Message key={index} message={message} />
+          ))}
+        </div>
+      </div>
+      <form onSubmit={handleFormSubmit} className="relative z-10">
+        <div className="fixed flex flex-row gap-2 items-center inset-x-0  mt-10 bottom-0  z-20 w-full  max-w-4xl mx-auto px-8 sm:px-28 py-10">
+          <div className="flex mt-auto w-full relative bottom-0  items-center">
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3">
+              <button
+                type="button"
+                className="flex items-center justify-center rounded-full disabled:cursor-not-allowed"
+                aria-label="Attach files"
+                title="Attach files(To be implemented)"
+                disabled
+              >
+                <PaperClipIcon className="w-5 h-5 text-gray-700 dark:text-gray-400" />
+              </button>
+            </div>
+            <input
+              ref={PromptInput}
+              className="bg-gray-50 border pl-10  outline-none resize-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Send a message."
+              name="message"
+              value={input}
+              onChange={handleInputChange}
+            />
+          </div>
+          <button
+            type="submit"
+            onClick={() => handleFormSubmit}
+            className={`cursor-pointer z-20 ${
+              input ? "" : "bg-gray-100 dark:bg-gray-800"
+            } border dark:border-gray-700 font-bold py-2 px-2 rounded-lg dark:text-gray-200 text-gray-700`}
+          >
+            {isLoading ? (
+              <LoaderIcon
+                aria-hidden="true"
+                role="status"
+                className="w-6 h-6  animate-spin"
+              />
+            ) : (
+              <SendIcon className="h-6 w-6 rotate-45" />
+            )}
+          </button>
+        </div>
+      </form>
+    </>
+  );
+};
+
+export default ChatUi;
+```
+
+This will render our UI:
+![The Final UI rendering](/images/posts/chat-gpt-clone.png)
+
+Now we have to create the backend. Let's our route handler for our API at `/app/api/chat/route.ts`
+
+```ts
+import { ChatCompletionFunctions, Configuration, OpenAIApi } from "openai-edge";
+import { OpenAIStream, StreamingTextResponse } from "ai";
+import { lookupWeather } from "@/src/helpers/functions";
+
+// Create an OpenAI API client (that's edge friendly!)
+const config = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(config);
+
+// IMPORTANT! Set the runtime to edge
+export const runtime = "edge";
+
+export async function POST(req: Request) {
+  // Extract the `messages` from the body of the request
+  const { messages } = await req.json();
+  const functions: ChatCompletionFunctions[] = [
+    {
+      name: "get_current_time",
+      description: "get the current time in a given location",
+      parameters: {
+        type: "object", // specify that the parameter is an object
+        properties: {
+          location: {
+            type: "string", // specify the parameter type as a string
+            description:
+              "The location, e.g. Beijing, China. But it should be written in a timezone name like Asia/Shanghai",
+          },
+        },
+        required: ["location"], // specify that the location parameter is required
+      },
+    },
+    {
+      name: "get_current_weather",
+      description: "get the weather forecast in a given location",
+      parameters: {
+        type: "object", // specify that the parameter is an object
+        properties: {
+          location: {
+            type: "string", // specify the parameter type as a string
+            description:
+              "The location, e.g. Beijing, China. But it should be written in a city, state, country",
+          },
+        },
+        required: ["location"], // specify that the location parameter is required
+      },
+    },
+  ];
+  // Ask OpenAI for a streaming chat completion given the prompt
+  const response = await openai.createChatCompletion({
+    model: "gpt-3.5-turbo",
+    stream: true,
+    messages,
+    functions: functions,
+    function_call: "auto",
+  });
+  // Convert the response into a friendly text-stream
+
+  const stream = OpenAIStream(response, {
+    experimental_onFunctionCall: async (
+      { name, arguments: args },
+      createFunctionCallMessages
+    ) => {
+      // if you skip the function call and return nothing, the `function_call`
+      // message will be sent to the client for it to handle
+      if (name === "get_current_weather") {
+        // Call a weather API here
+        const weatherData = await lookupWeather(String(args.location));
+
+        // `createFunctionCallMessages` constructs the relevant "assistant" and "function" messages for you
+        const newMessages = createFunctionCallMessages(weatherData);
+        return openai.createChatCompletion({
+          messages: [...messages, ...newMessages],
+          stream: true,
+          model: "gpt-3.5-turbo-0613",
+          // see "Recursive Function Calls" below
+          functions,
+        });
+      }
+    },
+  });
+  // Respond with the stream
+  return new StreamingTextResponse(stream);
+}
+```
+
+I passed two functions here: get_current_time and get_current_weather. These functions will be handled by OpenAI, but we need to know when they're called.
+Thats why we have the
+
+```ts
+const stream = OpenAIStream(response, {
+  experimental_onFunctionCall: async (
+    { name, arguments: args },
+    createFunctionCallMessages
+  ) => {
+    // if you skip the function call and return nothing, the `function_call`
+    // message will be sent to the client for it to handle
+    if (name === "get_current_weather") {
+      // Call a weather API here
+      const weatherData = await lookupWeather(String(args.location));
+
+      // `createFunctionCallMessages` constructs the relevant "assistant" and "function" messages for you
+      const newMessages = createFunctionCallMessages(weatherData);
+      return openai.createChatCompletion({
+        messages: [...messages, ...newMessages],
+        stream: true,
+        model: "gpt-3.5-turbo-0613",
+        // see "Recursive Function Calls" below
+        functions,
+      });
+    }
+  },
+});
+```
+
+What we do here I create a function that receives the name of the function and the arguments of it.
+For example, if a user asked for the weather we need to know in what location.
+
+```bash
+> What is the Weather in New York?
+-  The Weather in new york is 32C
+```
+
+In this example the user asked for the Weather in New York then OpenAI will know that the argument given is the location which is New York.
+something like this
+
+```json
+{
+  "args": {
+    "location": "New York"
+  }
+}
+```
+
+We know now that the location is new york so we need to give it to our API or whatever you do for obtain the weather.
+
+```ts
+// The rest of the code
+const weatherData = await lookupWeather(String(args.location));
+const newMessages = createFunctionCallMessages(weatherData);
+return openai.createChatCompletion({
+  messages: [...messages, ...newMessages],
+  stream: true,
+  model: "gpt-3.5-turbo-0613",
+  // see "Recursive Function Calls" below
+  functions,
+});
+// ...
+```
+
+I created a helper at `/src/helpers/function.ts` that contains all my functions that will give OpenAI the data needed. here is a basic example:
+
+```ts
+async function lookupWeather(location: string): Promise<string> {
+  const url = `https://weather-by-api-ninjas.p.rapidapi.com/v1/weather?city=${location}`;
+
+  const options = {
+    method: "GET",
+    headers: {
+      "X-RapidAPI-Key": String(process.env.RAPID_API_KEY),
+    },
+  };
+
+  try {
+    const response = await fetch(url, options);
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} ${response.statusText}`);
+    }
+
+    const weather = await response.json();
+    const weatherResponse = `The current weather in ${location} is ${weather.temp}°C
+    with ${weather.cloud_pct}% cloud cover and ${weather.humidity}% humidity
+    and a wind speed of ${weather.wind_speed} km/h`;
+    return weatherResponse;
+  } catch (error) {
+    console.error("Request failed:", error);
+    throw new Error("An error occurred while looking up the weather.");
+  }
+}
+```
+
+If you want to create your own functions you can check OpenAI blog about [Function Calling](https://openai.com/blog/function-calling-and-other-api-updates).
+The function calling gives an unlimited number of options, such as image generation, sending emails, turning off/on your houses lights, etc! If you want me to try all of them, let me know.
+
+### Conclusion
+
+That's the end. In this article we learned about Vercel AI Sdk, Streaming and OpenAI function calling. I hope you found this helpful, I might understand if you find this article confusing so I will recommend you checking out the [Source Code](https://github.com/lmoisz03/chatgpt-clone/) at GitHub.
