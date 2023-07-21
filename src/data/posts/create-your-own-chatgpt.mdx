@@ -450,10 +450,6 @@ const ChatUi = () => {
 
   const setPrompt = (prompt: string) => {
     if (PromptInput?.current) {
-      // We need to set the value of the input to the prompt, however needs to be done like a human
-      // because the browser will not allow it.
-      // We can't just set the value of the input to the prompt, because the browser will not allow it.
-      // We need to set the value of the input to the prompt, however needs to be done like a human
       setInput(prompt);
     }
   };
