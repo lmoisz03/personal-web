@@ -1,6 +1,8 @@
 import ArticleCard from "@/src/components/partials/ArticleCard";
+import SearchBox from "@/src/components/search";
 import { getSortedArticles } from "@/src/lib/article";
 import { getAllCategories } from "@/src/lib/helpers/getCategories";
+import getFilteredArticles from "@/src/lib/helpers/getFilteredArticles";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -20,18 +22,32 @@ const getPosts = async () => {
   };
 };
 
-export default async function Home() {
-  const data = await getPosts();
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: {
+    search: string;
+  };
+}) {
+  const data = await getFilteredArticles({ search: searchParams.search });
   // console.log(posts);
   const { articles } = data;
   const categories = getAllCategories();
   return (
     <>
       <div className="flex flex-col gap-2 py-4 mb-4">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-200 mb-4">
-          Latest articles
-        </h1>
-        <div className="flex flex-wrap gap-2 flex-row">
+        <div className="flex flex-col gap-2">
+          <h2 className="text-4xl capitalize font-semibold text-gray-900 dark:text-gray-200">
+            Latest articles
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400">
+            Check the latest articles about web development, design, crypto.
+          </p>
+          <div className="flex  gap-2 max-w-xl w-full">
+            <SearchBox />
+          </div>
+        </div>
+        {/* <div className="flex flex-wrap gap-2 flex-row">
           {categories
             .filter((category) => category.featured) // Filter only the featured categories
             .map((category) => (
@@ -45,9 +61,14 @@ export default async function Home() {
                 </span>
               </a>
             ))}
-        </div>
+        </div> */}
       </div>
       <div className="flex flex-col gap-4">
+        {articles.length === 0 && (
+          <p className="text-gray-600 dark:text-gray-400">
+            Sorry, no articles found.
+          </p>
+        )}
         {articles.map((post) => (
           <ArticleCard post={post} key={post.slug} />
         ))}

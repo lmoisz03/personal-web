@@ -6,6 +6,7 @@ import "@code-hike/mdx/dist/index.css";
 import GoUpButton from "./partials/go-up-button";
 import Footer from "@/src/components/footer";
 import { Metadata } from "next";
+import CategoriesCard from "@/src/components/partials/categoriesCard";
 
 export const metadata: Metadata = {
   title: {
@@ -27,6 +28,7 @@ export default function BlogLayout({
           {/* <main className="flex flex-col lg:max-w-[70%] w-full">{children}</main> */}
           <aside className="md:w-[30%] w-full  flex-col gap-2 sticky top-0 h-full md:pt-16  flex">
             <AboutMeCard />
+            <CategoriesCard />
             <NewsletterCard />
             {/* Ads */}
           </aside>

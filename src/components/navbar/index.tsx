@@ -3,6 +3,7 @@ import {
   IconBrandGithub,
   IconBrandInstagram,
   IconBrandTwitter,
+  IconSearch,
   IconSun,
 } from "@tabler/icons-react";
 import Link from "next/link";
@@ -41,23 +42,6 @@ const Navbar = () => {
     },
   ];
 
-  const socials = [
-    {
-      name: "Instagram",
-      href: strings.instagram,
-      icon: IconBrandInstagram,
-    },
-    {
-      name: "Twitter",
-      href: strings.twitter,
-      icon: IconBrandTwitter,
-    },
-    {
-      name: "Github",
-      href: strings.github,
-      icon: IconBrandGithub,
-    },
-  ];
   return (
     <header className="sticky top-0 z-50">
       <nav className="bg-white border-gray-200 px-6 lg:px-12 py-2.5 dark:bg-gray-900">
@@ -69,22 +53,8 @@ const Navbar = () => {
             </span>
           </Link>
           <div className="flex items-center lg:order-2 ">
-            {/* <div className="hidden sm:flex items-center">
-              {socials.map((social) => (
-                <Link
-                  key={social.name}
-                  className=" rounded-lg hover:bg-gray-100 p-2 dark:hover:bg-gray-800"
-                  href={social.href}
-                >
-                  <span className="sr-only">{social.name}</span>
-                  <social.icon
-                    className="h-6 w-6 dark:text-gray-300 text-gray-700"
-                    aria-hidden="true"
-                  />
-                </Link>
-              ))}
-            </div> */}
             <BtnThemeNavbar />
+
             <button
               data-collapse-toggle="mobile-menu-2"
               type="button"

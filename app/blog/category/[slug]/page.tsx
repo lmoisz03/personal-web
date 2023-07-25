@@ -1,15 +1,10 @@
 import ArticleCard from "@/src/components/partials/ArticleCard";
+import SearchBox from "@/src/components/search";
 import { getSortedArticles } from "@/src/lib/article";
-import { Category, getAllCategories } from "@/src/lib/helpers/getCategories";
+import { getAllCategories } from "@/src/lib/helpers/getCategories";
+import getFilteredArticles from "@/src/lib/helpers/getFilteredArticles";
 import { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-
-// export const metadata = {
-//   title: "Blog | Web development, design and more",
-//   description:
-//     "Check the latest articles about web development, design, crypto and more in our blog for free now!",
-// };
 
 export async function generateMetadata({
   params,
@@ -73,22 +68,21 @@ export async function generateMetadata({
     },
   };
 }
-const getPosts = async () => {
-  const maxArticlesToShow = 10;
-  const sortedArticles = getSortedArticles(maxArticlesToShow);
-  return {
-    articles: sortedArticles,
-  };
-};
 
 export default async function Home({
   params,
+  searchParams,
 }: {
   params: {
     slug: string;
   };
+  searchParams: {
+    search: string;
+  };
 }) {
-  const data = await getPosts();
+  const data = await getFilteredArticles({
+    search: searchParams.search,
+  });
   // console.log(posts);
   const { articles } = data;
   const categories = getAllCategories();
@@ -115,6 +109,9 @@ export default async function Home({
           <p className="text-gray-600 text-base dark:text-gray-300">
             {category.content}
           </p>
+          <div className="flex  gap-2 max-w-xl w-full">
+            <SearchBox />
+          </div>
         </div>
         {/* <div className="flex flex-wrap gap-2 flex-row">
           {categories

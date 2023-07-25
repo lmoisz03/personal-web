@@ -51,8 +51,7 @@ const NewsletterCard = () => {
         Subscribe to Our Newsletter
       </h2>
       <p className="text-gray-600 dark:text-gray-400">
-        Stay updated with the latest news, articles, and promotions.(Coming
-        soon)
+        Stay updated with the latest news, articles, and promotions.
       </p>
       {error && <p className="text-red-500 mt-2">{error}</p>}
       {isSubscribed && (
